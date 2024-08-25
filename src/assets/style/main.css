@@ -1,0 +1,80 @@
+@import "./tailwind.css";
+* {
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+:root {
+  --red: #e40018;
+  --blue: #59add0;
+  --dark: #202126;
+  --light-dark: #393f49;
+  --bold-blue: #537ba7;
+  --grey: #5e5e7b;
+  --light-white: #f1f1f1;
+  --light-blue: #d5dced;
+}
+
+.limit1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.text-liner {
+  background-image: linear-gradient(
+    to right,
+    rgba(45, 127, 223, 1),
+    rgba(12, 84, 167, 1)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.scroll-y::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scroll-y::-webkit-scrollbar-track {
+  width: 10px;
+  background: var(--light-blue);
+  border-radius: 4px;
+}
+
+.scroll-y::-webkit-scrollbar-thumb {
+  background: var(--blue);
+  border-radius: 4px;
+}
+
+.scroll-y::-webkit-scrollbar-thumb:hover {
+  background: var(--blue);
+}
+.scroll-x {
+  transition: all 0.5s;
+}
+
+.scroll-x::-webkit-scrollbar {
+  height: 5px;
+}
+
+.scroll-x::-webkit-scrollbar-track {
+  height: 10px;
+  background: var(--light-blue);
+  border-radius: 4px;
+}
+
+.scroll-x::-webkit-scrollbar-thumb {
+  background: var(--blue);
+  border-radius: 4px;
+}
+
+.scroll-x::-webkit-scrollbar-thumb:hover {
+  background: var(--blue);
+}
+
+.ant-modal .ant-modal-content {
+  border-radius: 16px;
+}

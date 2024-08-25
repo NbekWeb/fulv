@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Sf Pro';
+    src: url('../font/sfpro.OTF') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Intro';
+    src: url('../font/Intro Regular Alt.otf') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
