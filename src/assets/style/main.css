@@ -24,6 +24,10 @@
   -webkit-box-orient: vertical;
 }
 
+.main_height{
+  height: calc(100vh - 150px);
+}
+
 .text-liner {
   background-image: linear-gradient(
     to right,
@@ -75,6 +79,28 @@
   background: var(--blue);
 }
 
-.ant-modal .ant-modal-content {
-  border-radius: 16px;
+.scrollbar-content {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.5s;
+}
+
+.scrollbar-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar-content::-webkit-scrollbar-track {
+  width: 10px;
+  background: var(--light-blue);
+  border-radius: 4px;
+}
+
+.scrollbar-content::-webkit-scrollbar-thumb {
+  background: var(--blue);
+  border-radius: 4px;
+}
+
+.scrollbar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--blue);
 }

@@ -30,29 +30,5 @@ const scroll = (e) => {
 </template>
 
 <style scoped>
-.scrollbar-content {
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.5s;
-}
 
-.scrollbar-content::-webkit-scrollbar {
-  width: 5px;
-}
-
-.scrollbar-content::-webkit-scrollbar-track {
-  width: 10px;
-  background: var(--light-blue);
-  border-radius: 4px;
-}
-
-.scrollbar-content::-webkit-scrollbar-thumb {
-  background: var(--blue);
-  border-radius: 4px;
-}
-
-.scrollbar-content::-webkit-scrollbar-thumb:hover {
-  background: var(--blue);
-}
 </style>

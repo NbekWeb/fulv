@@ -1,6 +1,6 @@
 <script setup>
 import ScrollbarComponent from "@/components/ScrollbarComponent.vue";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
 import Cancel from "@/components/icons/Cancel.vue";
 import Check from "@/components/icons/Check.vue";
@@ -183,7 +183,6 @@ function groupByHour(process) {
 }
 
 const result = groupByHour(process);
-console.log(result);
 
 const getStyle = (item) => {
   const hoursDifference =
@@ -200,17 +199,46 @@ const getStyle = (item) => {
 };
 
 const timeLine = (current) => {
-  const left = current.split(":")[0] - -current.split(":")[1] / 60 - 9;
-  return {
-    left: `${left * 72}px`,
-  };
+  const [hours, minutes] = current.split(":").map(Number);
+
+  if (hours > 9 && hours < 21) {
+    const left = hours - 9 + minutes / 60;
+    return {
+      left: `${left * 72}px`,
+    };
+  } else {
+    return {
+      opacity: "0",
+    };
+  }
 };
-const current = "10:45";
+const getCurrentTime = () => {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+
+  return `${hours}:${minutes}`;
+};
+
+// if (parseInt(hours, 10) > 9) {
+//     return `${hours}:${minutes}`;
+//   }
+
+const form = reactive({
+  name: "Светлана",
+  phoneNumber: "+7 (924) 333-33-57",
+});
+
+function submitForm() {
+  console.log("Form submitted", form);
+}
+
+const current = getCurrentTime();
 </script>
 <template>
-  <scrollbar-component height="calc(100vh - 200px)">
+  <scrollbar-component height="calc(100vh)">
     <template #content>
-      <div class="w-full pt-4 pl-5 bg-blue-l rounded-xl font-sf-pro">
+      <div class="w-full pt-4 pl-5 bg-blue-l font-sf-pro">
         <div class="flex gap-0 pb-9">
           <div class="pr-3 border-r-2 w-44 border-bor">
             <div class="flex justify-between text-xs text-blue">
@@ -300,7 +328,9 @@ const current = "10:45";
                 <span class="pb-2 font-medium text-dark">
                   Процедурная {{ i + 1 }}
                 </span>
-                <div class="flex flex-col w-full pr-1 overflow-y-auto gap-y-1 max-h-50 scroll-y">
+                <div
+                  class="flex flex-col w-full pr-1 overflow-y-auto gap-y-1 max-h-50 scroll-y"
+                >
                   <template v-for="(item, j) of items" :key="j">
                     <div
                       class="flex flex-col justify-between w-full p-2 text-white rounded-lg bg-bold-blue h-19 text-ms"
@@ -344,7 +374,7 @@ const current = "10:45";
                           <span>Алия Х.</span>
                         </div>
                       </div>
-                      <div class="flex justify-between ">
+                      <div class="flex justify-between">
                         <span>Светлана</span>
                         <span>+7 (924) 333-33-57</span>
                       </div>
@@ -357,7 +387,10 @@ const current = "10:45";
         </div>
 
         <a-modal v-model:open="open" class="!w-[720px]">
-          <div
+          <a-form
+            :model="form"
+            @finish="submitForm"
+            layout="vertical"
             class="flex flex-col items-center text-base font-medium opacity-50 font-intro text-dark"
           >
             <span class="text-2xl font-bold">Вы смотрите запись клиента</span>
@@ -370,44 +403,12 @@ const current = "10:45";
               <p class="mb-4">Стерлитамак, Карла Маркса 124</p>
               <div class="flex gap-48">
                 <div class="flex items-center gap-3">
-                  <svg
-                    width="12"
-                    height="15"
-                    viewBox="0 0 12 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M1.80291 11.6405C3.3172 11.636 4.8315 11.6376 6.34579 11.6376C7.84969 11.6376 9.35359 11.6347 10.8575 11.6418C11.0209 11.6426 11.0492 11.5943 11.0483 11.4436C11.0417 10.4359 11.0479 9.42866 11.0434 8.42099C11.0413 7.94338 11.0662 7.46578 11.0167 6.98901C10.8837 5.70693 10.3257 4.65845 9.27667 3.90269C8.11746 3.06782 6.81189 2.84047 5.41776 3.05491C3.21575 3.39386 1.65031 5.21392 1.64449 7.44246C1.64075 8.78741 1.64574 10.1328 1.64075 11.4777C1.64034 11.6068 1.6736 11.641 1.80291 11.6405ZM6.88839 4.32783C6.91958 4.19292 7.03434 4.11713 7.18485 4.14753C7.49128 4.20957 7.78109 4.32158 8.05509 4.4694C8.86172 4.90495 9.43301 5.5512 9.76481 6.40772C9.7831 6.4556 9.79474 6.50599 9.80347 6.53597C9.79932 6.66797 9.74568 6.74417 9.6434 6.78289C9.5382 6.82286 9.44798 6.78997 9.37937 6.70711C9.34736 6.66838 9.32823 6.61758 9.30869 6.57011C8.90039 5.58201 8.18523 4.9366 7.15824 4.64054C7.1283 4.6318 7.09795 4.62472 7.06885 4.61431C6.93247 4.56601 6.86012 4.45025 6.88839 4.32783Z"
-                      fill="#59ADD0"
-                    />
-                    <path
-                      d="M11.844 13.2617C11.6864 12.9798 11.4236 12.8799 11.1113 12.8799C7.91644 12.8795 4.72154 12.8774 1.52663 12.8757C1.21105 12.8757 0.977377 13.0131 0.836426 13.295C0.543712 13.8801 0.912099 14.4743 1.56863 14.4751C3.16109 14.4768 4.75314 14.4755 6.3456 14.4755C7.94804 14.4755 9.5509 14.4747 11.1533 14.4764C11.4411 14.4764 11.6714 14.3723 11.819 14.1224C11.9837 13.8434 12.0045 13.5486 11.844 13.2621V13.2617Z"
-                      fill="#59ADD0"
-                    />
-                    <path
-                      d="M5.10848 3.37327C5.50971 3.27625 5.92009 3.28291 6.37871 3.26709C6.73296 3.27125 7.1371 3.28666 7.53418 3.36827C7.68386 3.39909 7.71172 3.34787 7.70922 3.21504C7.69841 2.61168 7.30882 2.0787 6.72422 1.90131C6.60864 1.86634 6.58161 1.81595 6.58618 1.70769C6.59367 1.53697 6.59658 1.365 6.58577 1.19428C6.57662 1.04937 6.60198 0.977335 6.7737 0.991076C6.95332 1.00523 7.0581 0.903217 7.06101 0.757479C7.06392 0.606744 6.95374 0.512223 6.76788 0.510974C6.50885 0.509308 6.24981 0.510557 5.99078 0.510974C5.74131 0.510974 5.63071 0.583843 5.62821 0.749151C5.62572 0.913627 5.72842 0.99066 5.98329 0.993575C6.08391 0.994408 6.10387 1.0323 6.10138 1.12182C6.09597 1.31878 6.09472 1.51615 6.10138 1.7131C6.10512 1.81595 6.081 1.86259 5.9704 1.89507C5.37001 2.07245 4.95963 2.64291 4.97834 3.24918C4.98125 3.33912 4.98956 3.402 5.10848 3.37327Z"
-                      fill="url(#paint0_linear_247_623)"
-                    />
-                    <defs>
-                      <linearGradient
-                        id="paint0_linear_247_623"
-                        x1="6.34355"
-                        y1="0.510132"
-                        x2="6.34355"
-                        y2="3.3803"
-                        gradientUnits="userSpaceOnUse"
-                      >
-                        <stop stop-color="#A10808" />
-                        <stop offset="1" stop-color="#EA0202" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <span class="">Хиджама</span>
+                  <!-- SVG Icon -->
+                  <span>Хиджама</span>
                 </div>
                 <div class="flex gap-3">
                   <img
-                    src="@/assets/img/user.png "
+                    src="@/assets/img/user.png"
                     class="object-cover w-5 h-5 rounded-full"
                   />
                   <span>Алия Хиджамова</span>
@@ -415,40 +416,41 @@ const current = "10:45";
               </div>
             </div>
             <div class="flex gap-5 pt-8 mb-10">
-              <div class="flex flex-col gap-2">
-                <span class="px-4 text-bor2">Имя</span>
-                <span
-                  class="w-48 h-10 border border-bor2 rounded-[20px] flex items-center px-4"
-                  >Светлана</span
-                >
-              </div>
-              <div class="flex flex-col gap-2">
-                <span class="px-4 text-bor2">Номер телефона</span>
-                <span
-                  class="w-48 h-10 border border-bor2 rounded-[20px] flex items-center px-4"
-                  >+7 (924) 333-33-57</span
-                >
-              </div>
+              <a-form-item label="Имя" class="w-48">
+                <a-input
+                  v-model:value="form.name"
+                  class="h-10 border-bor2 rounded-[20px]"
+                />
+              </a-form-item>
+              <a-form-item label="Номер телефона" class="w-48">
+                <a-input
+                  v-model:value="form.phoneNumber"
+                  class="h-10 border-bor2 rounded-[20px]"
+                />
+              </a-form-item>
             </div>
             <div class="flex flex-col items-center">
               <span
                 @click="openModal"
                 class="w-48 h-10 border border-bor2 rounded-[20px] flex items-center px-4 hover:cursor-pointer"
-                >Отменить запись</span
               >
-              <span
-                @click="openModal"
-                class="w-48 h-10 bg-blue rounded-[20px] flex items-center px-4 text-white mt-5 hover:cursor-pointer"
-                >Перенести запись
+                Отменить запись
               </span>
+              <a-form-item class="w-48">
+                <a-button
+                  type="primary"
+                  html-type="submit"
+                  class="w-full bg-blue rounded-[20px] text-white mt-5"
+                >
+                  Перенести запись
+                </a-button>
+              </a-form-item>
             </div>
-          </div>
-          <template #footer> </template>
+          </a-form>
+          <template #footer></template>
         </a-modal>
       </div>
     </template>
   </scrollbar-component>
 </template>
-<style>
-
-</style>
+<style></style>
