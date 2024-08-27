@@ -1,11 +1,21 @@
 <script setup>
 import ScrollbarComponent from "@/components/ScrollbarComponent.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, watchEffect } from "vue";
 
 import Cancel from "@/components/icons/Cancel.vue";
 import Check from "@/components/icons/Check.vue";
 
 const open = ref(false);
+
+const viewportWidth = ref(window.innerWidth);
+
+window.addEventListener("resize", () => {
+  viewportWidth.value = window.innerWidth;
+});
+const columnWidth = ref((viewportWidth.value - 210) / 12);
+watchEffect(() => {
+  columnWidth.value = (viewportWidth.value - 210) / 12;
+});
 
 const openModal = () => {
   open.value = !open.value;
@@ -189,12 +199,17 @@ const getStyle = (item) => {
     item.end_time.split(":")[0] - item.start_time.split(":")[0];
   const minutesDifference =
     (item.end_time.split(":")[1] - item.start_time.split(":")[1]) / 60;
-  const calculatedWidth = hoursDifference * 72 + minutesDifference * 72;
+  const calculatedWidth =
+    hoursDifference * columnWidth.value + minutesDifference * columnWidth.value;
 
   return {
     top: `${item.id * 32 + item.id * 40}px`,
-    width: `${Math.max(calculatedWidth, 36)}px`,
-    left: `${item.start_time.split(":")[1] !== "00" ? "36px" : "0px"}`,
+    width: `${Math.max(calculatedWidth, columnWidth.value / 2)}px`,
+    left: `${
+      item.start_time.split(":")[1] !== "00"
+        ? `${columnWidth.value / 2}px`
+        : "0px"
+    }`,
   };
 };
 
@@ -276,6 +291,10 @@ const current = getCurrentTime();
               class="h-full border-r-2 w-18 border-bor min-w-18"
               v-for="i of 12"
               :key="i"
+              :style="{
+                width: columnWidth + 'px',
+                minWidth: columnWidth + 'px',
+              }"
             >
               <span class="flex justify-center h-8 text-xs text-bold-blue"
                 >{{ i + 8 < 10 ? `0${i + 8}` : i + 8 }}:00
